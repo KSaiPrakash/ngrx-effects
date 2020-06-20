@@ -1,0 +1,9 @@
+ {
+    "title": "Mr",
+    "firstName": "custService",
+    "lastName": "Prakash",
+    "email": "test@test.com",
+    "password": "Password@123",
+    "confirmPassword": "Password@123",
+    "acceptTerms": "Y"
+}
