@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
     submitted = false;
     //customers$: Observable<Customers[]>;
     customers;
-    customersStoreData;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<{ customers: Customer[] }>) {   }
 
@@ -53,11 +52,10 @@ export class AppComponent implements OnInit {
         // console.log('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
         // this.store.dispatch(new CustomerActionTypes.GetCustomer());
         
-        this.customersStoreData = this.store.select(selectAllCustomers);
-        this.customersStoreData.subscribe(res => {
+        this.store.select(selectAllCustomers).subscribe(res => {
             console.log(res);
             this.customers = res;
-        })
+        });
     }
 
     onReset() {

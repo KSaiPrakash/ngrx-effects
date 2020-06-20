@@ -8,7 +8,7 @@ export interface CustomerState extends EntityState<Customer> {
   selectedCustomerId: number | null;
  }
 const customerAdapter = createEntityAdapter<Customer>({
-  selectId: (customer: Customer) => customer.firstName
+  selectId: (customer: Customer) => customer.id
 });
 
 const customerInitialState: CustomerState = customerAdapter.getInitialState({
