@@ -5,7 +5,7 @@ import { Action } from '@ngrx/store';
 import { Observable, of, EMPTY } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import * as CustomerActions from './../actions/customer.action';
-import {Customer} from './../../models/customer.model';
+import {Customer, Customers} from './../../models/customer.model';
 import { CustomerService } from 'src/app/shared/services/customer.service';
 import { CustomerActionTypes } from './../actions/customer.action';
 
@@ -35,8 +35,10 @@ export class CustomerEffects {
     mergeMap((action: CustomerActions.GetCustomer) =>
       this.customerService.getCustomer().pipe(
         map(
-          (customers: Customer[]) =>
-            new CustomerActions.GetCustomerSuccess(customers)
+          (customers: Customers[]) =>
+            {
+              return new CustomerActions.GetCustomerSuccess(customers);
+            }
         ),
         catchError(err => of(new CustomerActions.GetCustomerFailure(err)))
       )

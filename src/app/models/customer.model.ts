@@ -1,5 +1,4 @@
 export class Customer {
-    id: number;
     title: string;
     firstName: string;
     lastName: string;
@@ -10,5 +9,5 @@ export class Customer {
 }
 
 export class Customers {
-    customer: Customer;
+    customer: Customer[];
 }

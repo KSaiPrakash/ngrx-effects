@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // import custom validator to validate that password and confirm password fields match
@@ -15,15 +15,14 @@ import { selectAllCustomers, getSelectedCustomer } from './store/reducers/custom
 export class AppComponent implements OnInit {
     registerForm: FormGroup;
     submitted = false;
-    customers$: Observable<Customers>;
+    //customers$: Observable<Customers[]>;
     customers;
+    customersStoreData;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<{ customers: Customer[] }>) {   }
 
+    /** Angular lifecycle hooks */
     ngOnInit() {
-        
-        this.customers$ = this.store.select(getSelectedCustomer);
-        this.getAllCustomers();
         this.registerForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -36,6 +35,7 @@ export class AppComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
     }
+    /** End of Angular lifecycle hooks block */
 
     // convenience getter for easy access to form fields
     get f() { return this.registerForm.controls; }
@@ -50,8 +50,14 @@ export class AppComponent implements OnInit {
 
         // display form values on success
         this.AddCustomer(this.registerForm);
-        console.log('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
-        this.store.dispatch(new CustomerActionTypes.GetCustomer());
+        // console.log('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
+        // this.store.dispatch(new CustomerActionTypes.GetCustomer());
+        
+        this.customersStoreData = this.store.select(selectAllCustomers);
+        this.customersStoreData.subscribe(res => {
+            console.log(res);
+            this.customers = res;
+        })
     }
 
     onReset() {
@@ -68,13 +74,5 @@ export class AppComponent implements OnInit {
         customer.confirmPassword = this.registerForm.value.confirmPassword;
         customer.acceptTerms = this.registerForm.value.acceptTerms;
         this.store.dispatch(new CustomerActions.CustomerAdd(customer));
-        
     }
-    getAllCustomers() {
-        this.customers$.subscribe((data) => {
-            console.log('data =>  ',data);
-            this.customers = data;
-          });
-    }
-
 }

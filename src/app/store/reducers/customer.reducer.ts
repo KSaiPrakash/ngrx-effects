@@ -8,7 +8,7 @@ export interface CustomerState extends EntityState<Customer> {
   selectedCustomerId: number | null;
  }
 const customerAdapter = createEntityAdapter<Customer>({
-  selectId: (customer: Customer) => customer.id
+  selectId: (customer: Customer) => customer.firstName
 });
 
 const customerInitialState: CustomerState = customerAdapter.getInitialState({
@@ -18,7 +18,7 @@ const customerInitialState: CustomerState = customerAdapter.getInitialState({
 export function CustomerReducer(state: CustomerState = customerInitialState, action: ActionEx) {
   switch (action.type) {
     case CustomerActionTypes.Customer_Get_Success:
-      return customerAdapter.addAll(action.payload, state);
+      return customerAdapter.setAll(action.payload, state);
     case CustomerActionTypes.Customer_Add:
       return customerAdapter.addOne(action.payload, state);
     case CustomerActionTypes.Customer_Remove:
