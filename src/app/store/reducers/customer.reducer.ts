@@ -5,6 +5,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 
 export interface CustomerState extends EntityState<Customer> {
+  loading: boolean; // indicates loading while fetching data
   selectedCustomerId: number | null;
  }
 const customerAdapter = createEntityAdapter<Customer>({
@@ -12,6 +13,7 @@ const customerAdapter = createEntityAdapter<Customer>({
 });
 
 const customerInitialState: CustomerState = customerAdapter.getInitialState({
+  loading: false,
   selectedCustomerId: null
 });
 
@@ -23,6 +25,8 @@ export function CustomerReducer(state: CustomerState = customerInitialState, act
       return customerAdapter.addOne(action.payload, state);
     case CustomerActionTypes.Customer_Remove:
       return customerAdapter.removeOne(action.payload, state);
+    case CustomerActionTypes.Customer_Post_Success:
+      return customerAdapter.addOne(action.payload, state);
     default:
       return state;
   }

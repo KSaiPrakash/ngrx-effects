@@ -6,7 +6,10 @@ export enum CustomerActionTypes {
   Customer_Remove = '[Customer Component] Remove',
   Customer_Get = '[Customer Component] Load Customers',
   Customer_Get_Success = '[Customer Component] Customer Get Success',
-  Customer_Get_Failure = '[Customer Component] Customer Get Failure'
+  Customer_Get_Failure = '[Customer Component] Customer Get Failure',
+  Customer_Post = '[Customer Component] Post Customers',
+  Customer_Post_Success = '[Customer Component] Customer Post Success',
+  Customer_Post_Failure = '[Customer Component] Customer Post Failure'
 }
 export class ActionEx implements Action {
   readonly type;
@@ -42,5 +45,20 @@ export class GetCustomer implements LoadAction {
   readonly type = CustomerActionTypes.Customer_Get;
   constructor() {
   }
-  
+}
+  /** Post Customer */
+export class PostCustomerSuccess implements ActionEx {
+  readonly type = CustomerActionTypes.Customer_Get_Success;
+  constructor(public payload: any) {
+  }
+}
+export class PostCustomerFailure implements ActionEx {
+  readonly type = CustomerActionTypes.Customer_Get_Failure;
+  constructor(public payload: any) {
+}
+}
+export class PostCustomer implements LoadAction {
+  readonly type = CustomerActionTypes.Customer_Get;
+  constructor(public payload: Customer) {
+  }
 }

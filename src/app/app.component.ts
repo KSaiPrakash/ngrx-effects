@@ -18,10 +18,12 @@ export class AppComponent implements OnInit {
     //customers$: Observable<Customers[]>;
     customers;
     constructor(private formBuilder: FormBuilder,
-                private store: Store<{ customers: Customer[] }>) {   }
+                private store: Store<{ customers: Customer[] }>,
+                private customerService: CustomerService) {   }
 
     /** Angular lifecycle hooks */
     ngOnInit() {
+        this.getAllCustomers();
         this.registerForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -51,11 +53,6 @@ export class AppComponent implements OnInit {
         this.AddCustomer(this.registerForm);
         // console.log('SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4));
         // this.store.dispatch(new CustomerActionTypes.GetCustomer());
-        
-        this.store.select(selectAllCustomers).subscribe(res => {
-            console.log(res);
-            this.customers = res;
-        });
     }
 
     onReset() {
@@ -72,5 +69,15 @@ export class AppComponent implements OnInit {
         customer.confirmPassword = this.registerForm.value.confirmPassword;
         customer.acceptTerms = this.registerForm.value.acceptTerms;
         this.store.dispatch(new CustomerActions.CustomerAdd(customer));
+        this.postCustomer(customer)
+    }
+    getAllCustomers() {
+        this.store.select(selectAllCustomers).subscribe(res => {
+            console.log(res);
+            this.customers = res;
+        });
+    }
+    postCustomer(customer: Customer) {
+        this.customerService.postCustomer(customer);
     }
 }

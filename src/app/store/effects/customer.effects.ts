@@ -45,4 +45,22 @@ export class CustomerEffects {
     )
   );
 
+  @Effect()
+  getPost$: Observable<Action> = this.action$.pipe(
+    ofType<CustomerActions.PostCustomer>(
+      CustomerActionTypes.Customer_Post
+    ),
+    mergeMap((action: CustomerActions.PostCustomer) => 
+      this.customerService.postCustomer(action.payload).pipe(
+        map(
+          (customers: Customers[]) =>
+            {
+              return new CustomerActions.PostCustomerSuccess(customers);
+            }
+        ),
+        catchError(err => of(new CustomerActions.PostCustomerFailure(err)))
+      )
+    )
+  );
+
 }
