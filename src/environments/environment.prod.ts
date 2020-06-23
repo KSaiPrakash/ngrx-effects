@@ -1,11 +1,11 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyCQpMW7e0UjXLeCOinykyTuKmF2E0855JI',
-    authDomain: 'my-first-app-28bf4.firebaseapp.com',
-    databaseURL: 'https://my-first-app-28bf4.firebaseio.com',
-    projectId: 'my-first-app-28bf4',
-    storageBucket: 'my-first-app-28bf4.appspot.com',
-    messagingSenderId: '628419262452'
+    apiKey: 'AIzaSyAGFQutGrTW7-JyrvoEbSkx5g0GZ9fKe7o',
+    authDomain: 'ngrx-effects-29a17.firebaseapp.com',
+    databaseURL: 'https://ngrx-effects-29a17.firebaseio.com',
+    projectId: 'ngrx-effects-29a17',
+    storageBucket: 'ngrx-effects-29a17.appspot.com',
+    messagingSenderId: '753805229823'
 }
 };

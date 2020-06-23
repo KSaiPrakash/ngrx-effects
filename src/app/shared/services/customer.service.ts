@@ -55,14 +55,14 @@ export class CustomerService {
   //         }, err => reject(err));
   // });
 
-    return of((resolve, reject) =>{
-        this.firestore
-            .collection('customers')
-            .add(customer)
-            .then(res => {
-              console.log('post cust reponse => ',res);
-            }, err => reject(err));
-    });
+    // return of((resolve, reject) =>{
+    //     this.firestore
+    //         .collection('customers')
+    //         .add(customer)
+    //         .then(res => {
+    //           console.log('post cust reponse => ', res);
+    //         }, err => reject(err));
+    // });
 }
 
 }
