@@ -8,25 +8,13 @@ import * as CustomerActions from './../actions/customer.action';
 import {Customer, Customers} from './../../models/customer.model';
 import { CustomerService } from 'src/app/shared/services/customer.service';
 import { CustomerActionTypes } from './../actions/customer.action';
+import { AngularFirestoreCollection } from '@angular/fire/firestore';
 
 @Injectable()
 export class CustomerEffects {
   constructor(private action$: Actions, private customerService: CustomerService) {}
 
-  // private ApiURL: string = 'https://localhost:44308/api/ToDo';
-  loadCustomer$: Observable<Action> =
-  // createEffect(() =>
-  this.action$.pipe(
-    ofType(CustomerActionTypes.Customer_Get),
-    // mergeMap(() => this.customerService.getCustomer()
-    //   .pipe(
-    //     map((customers: Customer[]) => new CustomerActionTypes.Customer_Get_Success(customers)),
-    //     catchError(err => of(new CustomerActionTypes.Customer_Get_Failure(err)))
-    //   ))
-    );
-  //);
-
-
+  /*
   @Effect()
   loadCustomers$: Observable<Action> = this.action$.pipe(
     ofType<CustomerActions.GetCustomer>(
@@ -44,7 +32,6 @@ export class CustomerEffects {
       )
     )
   );
-
   @Effect()
   getPost$: Observable<Action> = this.action$.pipe(
     ofType<CustomerActions.PostCustomer>(
@@ -62,5 +49,5 @@ export class CustomerEffects {
       )
     )
   );
-
+*/
 }

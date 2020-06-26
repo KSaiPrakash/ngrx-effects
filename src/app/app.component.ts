@@ -11,19 +11,21 @@ import { CustomerService } from './shared/services/customer.service';
 import * as CustomerActionTypes from './store/actions/customer.action';
 import * as CustomerReducer from './store/reducers/customer.reducer';
 import { selectAllCustomers, getSelectedCustomer } from './store/reducers/customer.reducer';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 @Component({ selector: 'app-root', templateUrl: 'app.component.html' })
 export class AppComponent implements OnInit {
     registerForm: FormGroup;
     submitted = false;
-    //customers$: Observable<Customers[]>;
-    customers;
+    customerCollection: AngularFirestoreCollection<Customer>;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<{ customers: Customer[] }>,
-                private customerService: CustomerService) {   }
+                private customerService: CustomerService,
+                private firestore: AngularFirestore) {
+                    this.customerCollection = this.firestore.collection<Customer>('customers');
+                 }
 
     /** Angular lifecycle hooks */
     ngOnInit() {
-        this.getAllCustomers();
         this.registerForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -60,24 +62,25 @@ export class AppComponent implements OnInit {
         this.registerForm.reset();
     }
     AddCustomer(registerForm: FormGroup) {
-        const customer = new Customer();
-        customer.firstName = this.registerForm.value.firstName;
-        customer.lastName = this.registerForm.value.lastName;
-        customer.email = this.registerForm.value.email;
-        customer.title = this.registerForm.value.title;
-        customer.password = this.registerForm.value.password;
-        customer.confirmPassword = this.registerForm.value.confirmPassword;
-        customer.acceptTerms = this.registerForm.value.acceptTerms;
+        // const customer = new Customer();
+        // customer.firstName = this.registerForm.value.firstName;
+        // customer.lastName = this.registerForm.value.lastName;
+        // customer.email = this.registerForm.value.email;
+        // customer.title = this.registerForm.value.title;
+        // customer.password = this.registerForm.value.password;
+        // customer.confirmPassword = this.registerForm.value.confirmPassword;
+        // customer.acceptTerms = this.registerForm.value.acceptTerms;
+        const customer = {
+            firstName : this.registerForm.value.firstName,
+            lastName : this.registerForm.value.lastName,
+            email : this.registerForm.value.email,
+            title : this.registerForm.value.title,
+            password : this.registerForm.value.password,
+            confirmPassword : this.registerForm.value.confirmPassword,
+            acceptTerms : this.registerForm.value.acceptTerms,
+        };
+        this.firestore.collection('customers').add(customer);
         this.store.dispatch(new CustomerActions.CustomerAdd(customer));
-        this.postCustomer(customer)
-    }
-    getAllCustomers() {
-        this.store.select(selectAllCustomers).subscribe(res => {
-            console.log(res);
-            this.customers = res;
-        });
-    }
-    postCustomer(customer: Customer) {
-        this.customerService.postCustomer(customer);
+        // this.store.dispatch(new CustomerActions.PostCustomer(customer));
     }
 }

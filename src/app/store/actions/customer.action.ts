@@ -48,17 +48,17 @@ export class GetCustomer implements LoadAction {
 }
   /** Post Customer */
 export class PostCustomerSuccess implements ActionEx {
-  readonly type = CustomerActionTypes.Customer_Get_Success;
+  readonly type = CustomerActionTypes.Customer_Post_Success;
   constructor(public payload: any) {
   }
 }
 export class PostCustomerFailure implements ActionEx {
-  readonly type = CustomerActionTypes.Customer_Get_Failure;
+  readonly type = CustomerActionTypes.Customer_Post_Failure;
   constructor(public payload: any) {
 }
 }
 export class PostCustomer implements LoadAction {
-  readonly type = CustomerActionTypes.Customer_Get;
+  readonly type = CustomerActionTypes.Customer_Post;
   constructor(public payload: Customer) {
   }
 }
