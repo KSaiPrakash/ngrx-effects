@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { map, delay, tap } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
+import { map, delay, tap, subscribeOn } from 'rxjs/operators';
 import { Customer } from 'src/app/models/customer.model';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,8 +9,12 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
 
-  constructor(private http: HttpClient, private firestore: AngularFirestore ) {}
 
+  customerCollection;
+
+  subs = new Subscription();
+
+  constructor(private http: HttpClient, private firestore: AngularFirestore ) {}
 
   getDataFromId(id: string): Observable<any> {
     // mock data Observable mapped from the passed id
@@ -34,11 +38,26 @@ export class CustomerService {
     //     console.log('snapshots ', snapshots);
     //   });
     // });
-    return new Observable<any>(() =>{
-      this.firestore.collection<Customer>('customers').get()
-      .subscribe(response => {
-        console.log(response);
-      })
+
+    // return new Observable<any>(() => {
+  
+    // });
+    return new Observable<any>(() => {this.firestore.collection<Customer>('customers').valueChanges().subscribe( res => {
+      this.customerCollection = res;
+  });
+});
+    // return new Observable<any>(() =>{
+    //   this.firestore.collection<Customer>('customers').get()
+    //   .subscribe(response => {
+    //     console.log(response);
+    //   })
+    // });
+
+  }
+  getData() {
+    this.firestore.collection<Customer>('customers').valueChanges().subscribe( res => {
+        this.customerCollection = res;
     });
+    return this.customerCollection;
   }
 }

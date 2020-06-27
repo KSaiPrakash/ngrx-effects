@@ -6,25 +6,20 @@ import { MustMatch } from './helpers/must-match.validator';
 import { Customer } from './models/customer.model';
 import { Store } from '@ngrx/store';
 import * as CustomerActions from './store/actions/customer.action';
-import { CustomerService } from './shared/services/customer.service';
 import * as CustomerActionTypes from './store/actions/customer.action';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 @Component({ selector: 'app-root', templateUrl: 'app.component.html' })
 export class AppComponent implements OnInit {
     registerForm: FormGroup;
     submitted = false;
-    customerCollection: AngularFirestoreCollection<Customer>;
-    customerCollections = [];
+    customerCollections;
     constructor(private formBuilder: FormBuilder,
-                private store: Store<{ customers: Customer[] }>,
-                private customerService: CustomerService,
-                private firestore: AngularFirestore) {
+                private store: Store<{ customers: Customer[] }>) {
                    // this.customerCollection = this.firestore.collection<Customer>('customers');
                  }
 
     /** Angular lifecycle hooks */
     ngOnInit() {
-        this.customerCollections = [this.store.dispatch(new CustomerActionTypes.GetCustomer())];
+        this.store.dispatch(new CustomerActionTypes.GetCustomer());
         this.registerForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -36,6 +31,10 @@ export class AppComponent implements OnInit {
         }, {
             validator: MustMatch('password', 'confirmPassword')
         });
+        this.store.select('customers').subscribe( res => {
+            this.customerCollections = res;
+        });
+        console.log('customerCollections => ',this.customerCollections);
     }
     /** End of Angular lifecycle hooks block */
 
