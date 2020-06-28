@@ -31,33 +31,8 @@ export class CustomerService {
     });
   }
   getCustomers(): Observable<Customer> {
-    // return new Observable<any>(() => {
-    //   this.firestore.collection('/customers').snapshotChanges()
-    //   .subscribe(snapshots => {
-    //     // resolve(snapshots);
-    //     console.log('snapshots ', snapshots);
-    //   });
-    // });
+    return new Observable<any>(() => {
 
-    // return new Observable<any>(() => {
-  
-    // });
-    return new Observable<any>(() => {this.firestore.collection<Customer>('customers').valueChanges().subscribe( res => {
-      this.customerCollection = res;
-  });
-});
-    // return new Observable<any>(() =>{
-    //   this.firestore.collection<Customer>('customers').get()
-    //   .subscribe(response => {
-    //     console.log(response);
-    //   })
-    // });
-
-  }
-  getData() {
-    this.firestore.collection<Customer>('customers').valueChanges().subscribe( res => {
-        this.customerCollection = res;
     });
-    return this.customerCollection;
   }
 }

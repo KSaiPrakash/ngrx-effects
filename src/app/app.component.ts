@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { Store } from '@ngrx/store';
+import { AngularFirestore } from '@angular/fire/firestore';
 // import custom validator to validate that password and confirm password fields match
 import { MustMatch } from './helpers/must-match.validator';
 import { Customer } from './models/customer.model';
-import { Store } from '@ngrx/store';
 import * as CustomerActions from './store/actions/customer.action';
-import * as CustomerActionTypes from './store/actions/customer.action';
 @Component({ selector: 'app-root', templateUrl: 'app.component.html' })
 export class AppComponent implements OnInit {
     registerForm: FormGroup;
     submitted = false;
     customerCollections;
     constructor(private formBuilder: FormBuilder,
-                private store: Store<{ customers: Customer[] }>) {
-                   // this.customerCollection = this.firestore.collection<Customer>('customers');
-                 }
+                private store: Store<{ customers: Customer[] }>,
+                private firestore: AngularFirestore ) {
+                   this.firestore.collection<Customer>('customers').valueChanges().subscribe( res => {
+                    if (res) {
+                        this.customerCollections = res;
+                    }
+                });
+        }
 
     /** Angular lifecycle hooks */
     ngOnInit() {
-        this.store.dispatch(new CustomerActionTypes.GetCustomer());
         this.registerForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -31,10 +34,6 @@ export class AppComponent implements OnInit {
         }, {
             validator: MustMatch('password', 'confirmPassword')
         });
-        this.store.select('customers').subscribe( res => {
-            this.customerCollections = res;
-        });
-        console.log('customerCollections => ',this.customerCollections);
     }
     /** End of Angular lifecycle hooks block */
 
@@ -68,7 +67,6 @@ export class AppComponent implements OnInit {
             confirmPassword : this.registerForm.value.confirmPassword,
             acceptTerms : this.registerForm.value.acceptTerms,
         };
-        // this.store.dispatch(new CustomerActions.CustomerAdd(customer));
         this.store.dispatch(new CustomerActions.PostCustomer(customer));
     }
 }
