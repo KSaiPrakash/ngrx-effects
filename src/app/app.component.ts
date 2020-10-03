@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
     registerForm: FormGroup;
     submitted = false;
     customerCollections;
+    customerDataStore;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<{ customers: Customer[] }>,
                 private firestore: AngularFirestore ) {
@@ -34,6 +35,8 @@ export class AppComponent implements OnInit {
         }, {
             validator: MustMatch('password', 'confirmPassword')
         });
+        this.writeUpdatedDataToStore();
+        this.readUpdatedDataFromStore();
     }
     /** End of Angular lifecycle hooks block */
 
@@ -68,5 +71,17 @@ export class AppComponent implements OnInit {
             acceptTerms : this.registerForm.value.acceptTerms,
         };
         this.store.dispatch(new CustomerActions.PostCustomer(customer));
+    }
+    writeUpdatedDataToStore() {
+        this.store.dispatch(new CustomerActions.CustomerAdd(this.customerCollections));
+    }
+    readUpdatedDataFromStore() {
+        this.store.select('customers').subscribe(
+            res => {
+                if(res) {
+                    this.customerDataStore = res;
+                }
+            });
+        console.log('readUpdatedDataFromStore customerDataStore  => ', this.customerDataStore);
     }
 }
